@@ -1,0 +1,25 @@
+# this file should be at root of rails project
+version: "3.4"
+services:
+  app:
+    build:
+      context: ./
+      dockerfile: rails.dockerfile
+    restart: unless-stopped
+    working_dir: /app
+    # the project is mount in /app folder, the working_dir
+    volumes:
+      - .:/app
+    ports:
+      - 80:3000
+    environment:
+      TZ: 'America/Fortaleza'
+      RAILS_ENV: development # production
+    # these commands are called in working_dir
+    command:
+      - /bin/sh
+      - -c
+      - |
+        bundler install
+        bundler exec puma
+    tty: true
